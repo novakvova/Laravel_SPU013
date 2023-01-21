@@ -38,10 +38,16 @@ const HomePage = () => {
     </tr>
   ));
 
+  const handleClickPage = (page:number) => {
+    console.log("Click, number", page);
+  }
+
   return (
     <>
       <h1 className="text-center">Головна сторінка</h1>
-      <h4>Всього записів <strong>{total}</strong></h4>
+      <h4>
+        Всього записів <strong>{total}</strong>
+      </h4>
       <table className="table">
         <thead>
           <tr>
@@ -52,8 +58,12 @@ const HomePage = () => {
         </thead>
         <tbody>{data}</tbody>
       </table>
-      
-      <Pagination count_page={count_page} current_page={5}/>
+
+      <Pagination
+        count_page={count_page}
+        current_page={current_page}
+        onClick={handleClickPage}
+      />
     </>
   );
 };

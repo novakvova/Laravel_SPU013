@@ -5,35 +5,71 @@ import PageItem from "./PageItem";
 interface PaginationProps {
   count_page: number;
   current_page: number;
+  onClick: (page: number) => void;
 }
 
 const Pagination: FC<PaginationProps> = ({ count_page, current_page }) => {
   const buttons: Array<number> = [];
 
-  for (let i = 0; i <= count_page; i++) {
+  for (let i = 1; i <= count_page; i++) {
     buttons.push(i);
   }
 
   const pagination = buttons.map((page) => {
-    if(page===0)
-    {
-        return (
-            <PageItem key={page} page={current_page-1} text="<" isDisabled={current_page===1} />
-        );
-    }
-    else if (current_page <= 5) {
+   
+    if (current_page <= 5) {
         if(page<=7 || page==count_page) {
             return <PageItem key={page} page={page} isActive={page === current_page} />;
         }
         if(page===8 && count_page!=page) {
-            return <PageItem key={page} page={page} isActive={page === current_page} text="..." />;
+            return <PageItem key={page} page={page} text="..." />;
+        }
+    }
+    else if(current_page>5) {
+        if(page===1) {
+            return <PageItem key={page} page={page} isActive={page === current_page} />;
+        }
+        const range = count_page - current_page; //10 - 6 = 4, 10-7=3
+        if (range <= 4) {
+            const dot = current_page - (7 - range);
+            if (page === dot) {
+                return <PageItem key={page} page={page} text="..." />;
+            }
+            else if (current_page >= count_page - 5 && page > dot) {
+                return <PageItem key={page} page={page} isActive={page === current_page} />;
+            }
+        }
+        else if (range >= 5) {
+            const dotleft = current_page - 3;
+            const dotright = current_page + 3;
+            if (page === dotleft || page === dotright) {
+              return <PageItem key={page} page={page} text="..." />;
+            }
+            if (page > dotleft && page < dotright) {
+                return <PageItem key={page} page={page} isActive={page === current_page} />;
+            }
+            if (page === count_page) {
+                return <PageItem key={page} page={page} isActive={page === current_page} />;
+            }
         }
     }
   });
 
   return (
     <nav>
-      <ul className="pagination">{pagination}</ul>
+      <ul className="pagination">
+        <PageItem
+          page={current_page - 1}
+          text="<"
+          isDisabled={current_page === 1}
+        />
+        {pagination}
+        <PageItem
+          page={current_page + 1}
+          text=">"
+          isDisabled={current_page === count_page}
+        />
+      </ul>
     </nav>
   );
 };
