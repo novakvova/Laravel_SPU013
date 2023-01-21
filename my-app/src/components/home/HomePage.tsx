@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import http from "../../http_common";
+import Pagination from "../common/Pagination";
 import { GetProductAction, IProductItem, IProductResponse, IProductState, ProductActionTypes } from "./types";
 const HomePage = () => {
   //const [list, setList] = useState<Array<IProductItem>>([]);
-  const { list, total, count_page } = useSelector((state: any) => state.product as IProductState);
+  const { list, total, count_page, current_page } = useSelector((state: any) => state.product as IProductState);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -37,19 +38,6 @@ const HomePage = () => {
     </tr>
   ));
 
-  const buttons: Array<number> = [];
-  for (let i = 1; i <= count_page; i++) {
-    buttons.push(i);
-  }
-
-  const pagination = buttons.map(page => {
-    return (
-      <li key={page} className="page-item">
-        <Link to={"?page="+page} className="page-link">{page}</Link>
-      </li>
-    );
-  });
-
   return (
     <>
       <h1 className="text-center">Головна сторінка</h1>
@@ -64,11 +52,8 @@ const HomePage = () => {
         </thead>
         <tbody>{data}</tbody>
       </table>
-      <nav>
-        <ul className="pagination">
-          {pagination}
-        </ul>
-      </nav>
+      
+      <Pagination count_page={count_page} current_page={5}/>
     </>
   );
 };
