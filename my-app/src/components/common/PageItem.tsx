@@ -7,12 +7,17 @@ interface PageItemProps {
   isActive?: boolean;
   text?: string;
   isDisabled?: boolean;
+  onClickLink: (page: number) => void;
 }
 
-const PageItem: FC<PageItemProps> = ({ page, isActive=false, text=page, isDisabled=false }) => {
+const PageItem: FC<PageItemProps> = ({ page, isActive=false, text=page, isDisabled=false,
+    onClickLink }) => {
   return (
     <li className={classNames("page-item", {active: isActive}, {disabled: isDisabled})}>
-      <Link to={"?page=" + page} className="page-link">
+      <Link to={"?page=" + page} className="page-link" onClick={(e)=>{
+            e.preventDefault();
+            onClickLink(page);
+            }}>
         {text}
       </Link>
     </li>
